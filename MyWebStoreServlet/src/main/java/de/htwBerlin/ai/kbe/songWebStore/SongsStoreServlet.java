@@ -53,7 +53,7 @@ public class SongsStoreServlet extends HttpServlet {
 
     public SongsStoreServlet() {
         this.currentID = 1;
-    } 
+    }
 
     // load songStore from JSON file and set currentID
     @Override
@@ -105,24 +105,24 @@ public class SongsStoreServlet extends HttpServlet {
                 ;
                 try {
                     key = Integer.parseInt(request.getParameter(queryParam));
+                    if (songStore.containsKey(key)) {
+                        response.setContentType(APPLICATION_JSON);
+                        response.setStatus(200);
+                        printwriter.append(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(songStore.get(key + 1)));
+                    } else {
+                        response.setContentType(TEXT_PLAIN);
+                        printwriter.append("Diese ID gibt es leider noch nicht.");
+                    }
                 } catch (NumberFormatException e) {
                     response.setContentType(TEXT_PLAIN);
                     printwriter.append("Keine sinnvolle Eingabe für ID.");
-                }
-                if (songStore.containsKey(key)) {
-                    response.setContentType(APPLICATION_JSON);
-                    response.setStatus(200);
-                    printwriter.append(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(songStore.get(key + 1)));
-                } else {
-                    response.setContentType(TEXT_PLAIN);
-                    printwriter.append("Diese ID gibt es leider noch nicht");
                 }
                 printwriter.close();
                 break;
             default:
                 response.setContentType(TEXT_PLAIN);
                 printwriter = response.getWriter();
-                printwriter.append("Query hat noch keine Funktion");
+                printwriter.append("Query hat noch keine Funktion.");
                 printwriter.close();
         }
     }
@@ -147,8 +147,8 @@ public class SongsStoreServlet extends HttpServlet {
                 songs = readXMLToSongs(stringBuilder.toString());
                 Song newSong;
                 newSong = songs.getSongs().get(0);
-                
-                createResponse(newSong, response);       
+
+                createResponse(newSong, response);
 
             } else {
                 response.setContentType(TEXT_PLAIN);
