@@ -26,17 +26,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.StringReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.JAXB;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
 
 @WebServlet(
@@ -50,13 +46,17 @@ public class SongsStoreServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String APPLICATION_JSON = "application/json";
     private static final String TEXT_PLAIN = "text/plain";
-    private Map<Integer, Song> songStore = new HashMap<Integer, Song>();
-    private Integer currentID = 1;
-    private ArrayList<Song> songList = new ArrayList<Song>();
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private File file;
+    private final Map<Integer, Song> songStore = new HashMap<>();
+    private Integer currentID;
+    private ArrayList<Song> songList = new ArrayList<>();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public SongsStoreServlet() {
+        this.currentID = 1;
+    } 
 
     // load songStore from JSON file and set currentID
+    @Override
     public void init(ServletConfig servletConfig) throws ServletException {
 
         InputStream input = this.getClass().getClassLoader().getResourceAsStream("songs.json");
@@ -64,17 +64,15 @@ public class SongsStoreServlet extends HttpServlet {
             songList = objectMapper.readValue(input, new TypeReference<List<Song>>() {
             });
         } catch (JsonParseException e) {
-            e.printStackTrace();
         } catch (JsonMappingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
         }
 
         for (int i = songList.size() - 1; i >= 0; i--) {
             currentID++;
             songStore.put(currentID, songList.get(i));
         }
+        currentID--;
         System.out.println("Init Finished");
     }
 
@@ -132,32 +130,54 @@ public class SongsStoreServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        BufferedReader bufferedReader = request.getReader();
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            stringBuilder.append(line);
-        }
-        if (isValidJson(stringBuilder.toString())) {
+        try {
+            BufferedReader bufferedReader = request.getReader();
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            if (isValidJson(stringBuilder.toString())) {
+                Song newSong = objectMapper.readValue(stringBuilder.toString(), new TypeReference<Song>() {
+                });
+                createResponse(newSong, response);
 
-            Song newSong = objectMapper.readValue(stringBuilder.toString(), new TypeReference<Song>() {
-            });
-            createResonse(newSong, response);
+            } else if (isValidXML(stringBuilder.toString())) {
+                Songs songs;
+                songs = readXMLToSongs(stringBuilder.toString());
+                Song newSong;
+                newSong = songs.getSongs().get(0);
+                
+                createResponse(newSong, response);       
 
-        } else if (isValidXML(stringBuilder.toString())) {
-            Song newSong = JAXB.unmarshal(new StringReader(stringBuilder.toString()), Song.class);
-            createResonse(newSong, response);
-
-        } else {
-            response.setContentType(TEXT_PLAIN);
-            PrintWriter printwriter = response.getWriter();
-            printwriter.append("Request enthält keinen gueltigen Format");
+            } else {
+                response.setContentType(TEXT_PLAIN);
+                PrintWriter printwriter = response.getWriter();
+                printwriter.append("Request enthält keinen gueltigen Format");
+            }
+        } catch (SAXException | JAXBException ex) {
         }
     }
 
-    private boolean isValidXML(String maybeXML) {
-        Song song = JAXB.unmarshal(new StringReader(maybeXML), Song.class);
-        return true;
+    // Reads a list of songs from an XML-file into Songs.java
+    static Songs readXMLToSongs(String xmlSong) throws JAXBException, IOException {
+        JAXBContext context = JAXBContext.newInstance(Songs.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        StringReader reader = new StringReader(xmlSong);
+        return (Songs) unmarshaller.unmarshal(reader);
+
+    }
+
+    private boolean isValidXML(String xml) throws SAXException {
+        SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+        Schema schema = factory.newSchema(new StreamSource(this.getClass().getClassLoader().getResourceAsStream("songs.xsd")));
+        final Validator validator = schema.newValidator();
+        try {
+            validator.validate(new StreamSource(new StringReader(xml)));
+            return true;
+        } catch (final IOException | SAXException ioe) {
+        }
+        return false;
     }
 
     private boolean isValidJson(String maybeJson) {
@@ -169,7 +189,7 @@ public class SongsStoreServlet extends HttpServlet {
         }
     }
 
-    private void createResonse(Song newSong, HttpServletResponse response) throws IOException {
+    private synchronized void createResponse(Song newSong, HttpServletResponse response) throws IOException {
         currentID++;
         newSong.setId(currentID);
         songList.add(newSong);
@@ -185,11 +205,9 @@ public class SongsStoreServlet extends HttpServlet {
     // save songStore to file
     @Override
     public void destroy() {
-        System.out.println("In destroy");
         try {
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new FileOutputStream("output.json"), songList);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new FileOutputStream("output.json"), songStore);
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
