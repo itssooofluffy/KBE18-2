@@ -1,0 +1,186 @@
+--- REQUESTING ALL SONGS IN JSON ------------
+[ {
+  "id" : 10,
+  "title" : "7 Years",
+  "artist" : "Lukas Graham",
+  "album" : "Lukas Graham (Blue Album)",
+  "released" : 2015
+}, {
+  "id" : 9,
+  "title" : "Private Show",
+  "artist" : "Britney Spears",
+  "album" : "Glory",
+  "released" : 2016
+}, {
+  "id" : 8,
+  "title" : "No",
+  "artist" : "Meghan Trainor",
+  "album" : "Thank You",
+  "released" : 2016
+}, {
+  "id" : 7,
+  "title" : "i hate u, i love u",
+  "artist" : "Gnash",
+  "album" : "Top Hits 2017",
+  "released" : 2017
+}, {
+  "id" : 6,
+  "title" : "I Took a Pill in Ibiza",
+  "artist" : "Mike Posner",
+  "album" : "At Night, Alone.",
+  "released" : 2016
+}, {
+  "id" : 5,
+  "title" : "Bad Things",
+  "artist" : "Camila Cabello, Machine Gun Kelly",
+  "album" : "Bloom",
+  "released" : 2017
+}, {
+  "id" : 4,
+  "title" : "Ghostbusters (I'm not a fraid)",
+  "artist" : "Fall Out Boy, Missy Elliott",
+  "album" : "Ghostbusters",
+  "released" : 2016
+}, {
+  "id" : 3,
+  "title" : "Team",
+  "artist" : "Iggy Azalea",
+  "album" : null,
+  "released" : 2016
+}, {
+  "id" : 2,
+  "title" : "Mom",
+  "artist" : "Meghan Trainor, Kelli Trainor",
+  "album" : "Thank You",
+  "released" : 2016
+}, {
+  "id" : 1,
+  "title" : "Can't Stop the Feeling",
+  "artist" : "Justin Timberlake",
+  "album" : "Trolls",
+  "released" : 2016
+} ] 
+-------------------------------------------------------------------------------------------------
+--- REQUESTING ALL SONGS IN XML ------------
+[ {
+  "id" : 10,
+  "title" : "7 Years",
+  "artist" : "Lukas Graham",
+  "album" : "Lukas Graham (Blue Album)",
+  "released" : 2015
+}, {
+  "id" : 9,
+  "title" : "Private Show",
+  "artist" : "Britney Spears",
+  "album" : "Glory",
+  "released" : 2016
+}, {
+  "id" : 8,
+  "title" : "No",
+  "artist" : "Meghan Trainor",
+  "album" : "Thank You",
+  "released" : 2016
+}, {
+  "id" : 7,
+  "title" : "i hate u, i love u",
+  "artist" : "Gnash",
+  "album" : "Top Hits 2017",
+  "released" : 2017
+}, {
+  "id" : 6,
+  "title" : "I Took a Pill in Ibiza",
+  "artist" : "Mike Posner",
+  "album" : "At Night, Alone.",
+  "released" : 2016
+}, {
+  "id" : 5,
+  "title" : "Bad Things",
+  "artist" : "Camila Cabello, Machine Gun Kelly",
+  "album" : "Bloom",
+  "released" : 2017
+}, {
+  "id" : 4,
+  "title" : "Ghostbusters (I'm not a fraid)",
+  "artist" : "Fall Out Boy, Missy Elliott",
+  "album" : "Ghostbusters",
+  "released" : 2016
+}, {
+  "id" : 3,
+  "title" : "Team",
+  "artist" : "Iggy Azalea",
+  "album" : null,
+  "released" : 2016
+}, {
+  "id" : 2,
+  "title" : "Mom",
+  "artist" : "Meghan Trainor, Kelli Trainor",
+  "album" : "Thank You",
+  "released" : 2016
+}, {
+  "id" : 1,
+  "title" : "Can't Stop the Feeling",
+  "artist" : "Justin Timberlake",
+  "album" : "Trolls",
+  "released" : 2016
+} ] 
+-------------------------------------------------------------------------------------------------
+--- REQUESTING SONG NUMBER 7 IN XML --------
+{
+  "id" : 7,
+  "title" : "i hate u, i love u",
+  "artist" : "Gnash",
+  "album" : "Top Hits 2017",
+  "released" : 2017
+}=  
+-------------------------------------------------------------------------------------------------
+--- POSTING A SONG IN JSON ------------------
+Added new Song '1. Song', id= 11=  
+-------------------------------------------------------------------------------------------------
+--- REQUESTING THE NEW SONG NUMBER IN JSON --
+null=  
+-------------------------------------------------------------------------------------------------
+--- POSTING ANOTHER SONG IN XML ------------
+Added new Song 'null', id= 12=  
+-------------------------------------------------------------------------------------------------
+--- BAD REQUESTS ---------------
+--- GET WITH NO-ACCEPT ---------------
+{
+  "id" : 7,
+  "title" : "i hate u, i love u",
+  "artist" : "Gnash",
+  "album" : "Top Hits 2017",
+  "released" : 2017
+}=  
+-------------------------------------------------------------------------------------------------
+--- GET WITH BAD ACCEPT ---------------
+{
+  "id" : 7,
+  "title" : "i hate u, i love u",
+  "artist" : "Gnash",
+  "album" : "Top Hits 2017",
+  "released" : 2017
+}=  
+-------------------------------------------------------------------------------------------------
+--- GET WITH NON-EXISTING ID ---------------
+Diese ID gibt es leider noch nicht.=  
+-------------------------------------------------------------------------------------------------
+--- GET WITH BAD ID ---------------
+Keine sinnvolle Eingabe fuer ID.=  
+-------------------------------------------------------------------------------------------------
+--- GET WITH NO PARAM ---------------
+Query hat noch keine Funktion.=  
+-------------------------------------------------------------------------------------------------
+--- POSTING A NON-XML LOVE SONG ----
+<!doctype html><html lang="en"><head><title>HTTP Status 500 – Internal Server Error</title><style type="text/css">h1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} h2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} h3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} body {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} b {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} p {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;} a {color:black;} a.name {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 500 – Internal Server Error</h1><hr class="line" /><p><b>Type</b> Exception Report</p><p><b>Message</b> No content to map due to end-of-input</p><p><b>Description</b> The server encountered an unexpected condition that prevented it from fulfilling the request.</p><p><b>Exception</b></p><pre>com.fasterxml.jackson.databind.exc.MismatchedInputException: No content to map due to end-of-input
+ at [Source: (String)&quot;&quot;; line: 1, column: 0]
+	com.fasterxml.jackson.databind.exc.MismatchedInputException.from(MismatchedInputException.java:59)
+	com.fasterxml.jackson.databind.ObjectMapper._initForReading(ObjectMapper.java:4133)
+	com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:3988)
+	com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3011)
+	de.htwBerlin.ai.kbe.songWebStore.SongsStoreServlet.doPost(SongsStoreServlet.java:141)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:661)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+</pre><p><b>Note</b> The full stack trace of the root cause is available in the server logs.</p><hr class="line" /><h3>Apache Tomcat/8.5.31</h3></body></html>=  
+-------------------------------------------------------------------------------------------------
+--- SHUTTING DOWN TOMCAT -----------
